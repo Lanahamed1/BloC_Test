@@ -8,8 +8,8 @@ class CharacterWebServer {
     BaseOptions options = BaseOptions(
       baseUrl: baseUrl,
       receiveDataWhenStatusError: true,
-      connectTimeout: Duration(seconds: 60),
-      receiveTimeout: Duration(seconds: 30),
+      connectTimeout: const Duration(seconds: 60),
+      receiveTimeout: const Duration(seconds: 30),
     );
 
     dio = Dio(options);
@@ -17,9 +17,19 @@ class CharacterWebServer {
   Future<List<dynamic>> getAllCharacters() async {
     try {
       Response response = await dio.get('characters');
-      print(response.data.toString());
       return response.data;
     } catch (e) {
+      // ignore: avoid_print
+      print((e.toString()));
+      return [];
+    }
+  }
+  Future<List<dynamic>> getCharacterQuotes(String charName) async {
+    try {
+      Response response = await dio.get('quote',queryParameters: {'auther' :charName});
+      return response.data;
+    } catch (e) {
+      // ignore: avoid_print
       print((e.toString()));
       return [];
     }
